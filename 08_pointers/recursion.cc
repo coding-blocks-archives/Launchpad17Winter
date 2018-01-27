@@ -15,11 +15,23 @@ int fact(int n){
     return ans;
 }
 
+void printInc(int n){
+    if (n <= 0){
+        return;
+    }
+
+    printInc(n - 1);
+    cout << " " << n;
+}
+
 
 int main(){
     int n;
-    cin >> n;
 
-    int ans = fact(n);
-    cout << ans << endl;   
+    // cin >> n;
+    // int ans = fact(n);
+    // cout << ans << endl; 
+
+    cin >> n; 
+    printInc(n); 
 }
