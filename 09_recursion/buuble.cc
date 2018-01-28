@@ -91,6 +91,34 @@ void towerOfHanoi(int n, char src, char dest, char helper) {
     towerOfHanoi(n - 1, helper, dest, src);
 }
 
+int myPartition(int arr[], int be, int en) {
+    int pivot = arr[en];
+    int cur = be;
+    int noToBeSwapped = be; // its an index
+    while (cur < en) {
+        if (arr[cur] < pivot) {
+            swap(arr[noToBeSwapped], arr[cur]);
+            ++cur;
+            ++noToBeSwapped;
+        } else {
+            ++cur;
+        }
+    }
+    swap(arr[noToBeSwapped], arr[en]);
+    return noToBeSwapped;
+}
+
+void quickSort(int arr[], int be, int en) {
+    if (be > en) {
+        return;     // emptiness
+    }
+
+    int idx = myPartition(arr, be, en);
+    quickSort(arr, be, idx - 1);
+    quickSort(arr, idx + 1, en);
+}
+
+
 void inputArr(int arr[], int n) {
     for (int i = 0; i < n; ++i)
     {
@@ -105,11 +133,66 @@ void outputArr(int arr[], int n) {
     }
 }
 
+void copyArr(int x[], int arr[], int be, int en) {
+    while (be <= en) {
+        x[be] = arr[be];
+        ++be;
+    }
+}
+
+int mergeInvCnt(int arr[], int be, int en, int mid) {
+    int x[100];
+    int y[100];
+    copyArr(x, arr, be, mid);
+    copyArr(y, arr, mid + 1, en);
+
+    int i = be;
+    int j = mid + 1;
+    int k = be;
+    int ans = 0;
+    while (i <= mid && j <= en) {
+        if (x[i] <= y[j]) {
+            arr[k] = x[i];
+            ++k;
+            ++i;
+        } else {
+            ans += (mid - i) + 1;
+            arr[k] = y[j];
+            ++j;
+            ++k;
+        }
+    }
+
+    while (i <= mid) {
+        arr[k] = x[i];
+        ++i;
+        ++k;
+    }
+
+    while (j <= en) {
+        arr[k++] = y[j++];      // ignore
+    }
+    return ans;
+}
+
+int inversionCount(int arr[], int be, int en) {
+    if (be >= en) {
+        return 0;
+    }
+
+    int mid = (be + en) / 2;
+    int lt = inversionCount(arr, be, mid);
+    int rt = inversionCount(arr, mid + 1, en);
+    int ans = mergeInvCnt(arr, be, en, mid);
+    return lt + ans + rt;
+}
+
+
 int main() {
     int arr[100];
     int n;
     cin >> n;
-    // inputArr(arr, n);
+    inputArr(arr, n);
 
     // bubbleSort(arr, 0, n - 1);
 
@@ -123,8 +206,17 @@ int main() {
     // int ans = binarySearch(arr, 0, n - 1, x);
     // cout << ans;
 
-    towerOfHanoi(n, 'A', 'B', 'C');
+    // towerOfHanoi(n, 'A', 'B', 'C');
 
+    // int idx =  myPartition(arr, 0, n - 1);
+    // cout << "Partiton at idx " << idx << endl;
     // outputArr(arr, n);
+
+    // quickSort(arr, 0, n - 1);
+    // outputArr(arr, n);
+
+    int ans = inversionCount(arr, 0, n - 1);
+    cout << ans << endl;
+    outputArr(arr, n);
 
 }
