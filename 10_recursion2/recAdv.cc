@@ -15,13 +15,27 @@ void charOnButton(char digit, char code[]){
 }
 
 
-void printCodes(char numCode[]){
+void printCodes(char numCode[], int be, char ans[], int i){
+    if (numCode[be] == '\0'){
+        ans[i] = '\0';
+        cout << ans << endl;
+        return;
+    }
 
+    char code[5] = "";
+    charOnButton(numCode[be], code);
+
+    for(int x = 0; code[x] != '\0'; ++x){
+        ans[i] = code[x];
+        printCodes(numCode, be + 1, ans, i + 1);
+    }
 }
 
 int main(){
     char numCode[100];
+    char ans[100] = "";
+
     cin >> numCode;
 
-    printCodes(numCode);   
+    printCodes(numCode, 0, ans, 0);   
 }
