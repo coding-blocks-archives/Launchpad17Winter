@@ -3,8 +3,9 @@
 #include <iostream>
 using namespace std;
 const int DIM = 8;
+int cnt = 0;
 
-bool canPlace(int board[][DIM], int x, int y){
+bool canPlace(int board[][DIM], int x, int y) {
     if (x == 0 && y == 0) return false;
     return (x >= 0 && x < DIM &&
             y >= 0 && y < DIM &&
@@ -13,28 +14,31 @@ bool canPlace(int board[][DIM], int x, int y){
 
 
 bool knightSolver(int board[][DIM], int x, int y, int move_no) {
+    ++cnt;
     if (move_no == 64) {
         return true;
     }
 
-    int rowDir[] = { +1, +2, +2, +1, -1, -2, -2, -1};
-    int colDir[] = { +2, +1, -1, -2, -2, -1, +1, +2};
+    // int rowDir[] = { +1, +2, +2, +1, -1, -2, -2, -1};
+    // int colDir[] = { +2, +1, -1, -2, -2, -1, +1, +2};
+    int rowDir[] =  { -1, -2, -2, -1, +1, +2, +2, +1};
+    int colDir[] = { -2, -1, +1, +2, +2, +1, -1, -2};
 
-    for(int dir = 0; dir < 8; ++dir){
+    for (int dir = 0; dir < 8; ++dir) {
         int nextX = x + rowDir[dir];
         int nextY = y + colDir[dir];
-        if (canPlace(board, nextX, nextY)){
+        if (canPlace(board, nextX, nextY)) {
             board[nextX][nextY] = move_no;
             bool success = knightSolver(board, nextX, nextY, move_no + 1);
             if (success) return true;
-            board[nextX][nextY] = 0;   
+            board[nextX][nextY] = 0;
         }
     }
     return false;
 }
 
-void printBoard(int board[][DIM]){
-    for(int i = 0; i < DIM; ++i){
+void printBoard(int board[][DIM]) {
+    for (int i = 0; i < DIM; ++i) {
         for (int j = 0; j < DIM; ++j)
         {
             cout << board[i][j] << " ";
@@ -50,6 +54,7 @@ int main() {
     if (isSuccessful) {
         // print board
         printBoard(board);
+        cout << endl << cnt;
     }
     else {
         cout << "Hey Man!! This board cannot be visited by a knight";

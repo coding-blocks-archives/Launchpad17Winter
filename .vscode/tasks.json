@@ -1,0 +1,11 @@
+{
+    "version": "0.1.0",
+    "command": "g++",
+    "isShellCommand": true,
+    // compiles and links with debugger information
+    "args": ["-g", "-o", "a.exe", "${file}"],
+    // without debugger information
+    // "args": ["-o", "hello.exe", "hello.cpp"],
+    "showOutput": "always",
+    "echoCommand": true
+}

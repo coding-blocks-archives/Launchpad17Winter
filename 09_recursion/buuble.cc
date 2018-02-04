@@ -2,8 +2,9 @@
 // deepak@codingblocks.com
 #include <iostream>
 using namespace std;
-
+int cnt = 0;
 void bubbleSort(int arr[], int be, int en) {
+    cnt++;
     if (be >= en) {
         return; // empty array
     }
@@ -194,7 +195,8 @@ int main() {
     cin >> n;
     inputArr(arr, n);
 
-    // bubbleSort(arr, 0, n - 1);
+    bubbleSort(arr, 0, n - 1);
+    cout << cnt;
 
     // cout << isSorted(arr, 0, n - 1);
 
@@ -215,8 +217,8 @@ int main() {
     // quickSort(arr, 0, n - 1);
     // outputArr(arr, n);
 
-    int ans = inversionCount(arr, 0, n - 1);
-    cout << ans << endl;
-    outputArr(arr, n);
+//     int ans = inversionCount(arr, 0, n - 1);
+//     cout << ans << endl;
+//     outputArr(arr, n);
 
 }
