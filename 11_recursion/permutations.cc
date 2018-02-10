@@ -3,6 +3,8 @@
 #include <iostream>
 using namespace std;
 
+void x[] = "abc";
+
 void printPermutations(char str[], int be, char ans[], int i){
     if (str[be] == '\0'){
         cout << ans;
