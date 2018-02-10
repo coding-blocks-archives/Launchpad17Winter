@@ -44,10 +44,42 @@ void printLL(Node* head){
         cout << cur->data << "-->";
         cur = cur->next;
     }
+    cout << endl;
+}
+
+Node* midPoint(Node* head){
+    Node* slow = head;
+    Node* fast = head;  // set
+
+    while(fast && fast->next && fast->next->next){
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    return slow;
+}
+
+Node* reverseLL(Node* head){
+    if(!head || !head->next){
+        return head;
+    }
+
+    // A-->B
+    Node* nextNode = head->next;
+    Node* reveresedList = reverseLL(head->next);
+    nextNode->next = head;
+    head->next = NULL;
+    return reveresedList;
 }
 
 int main(){
     Node* head = createLL();
     printLL(head);
+
+    // Node* mid = midPoint(head);
+    // if (mid) cout << mid << " " <<  mid->data;
+
+    Node * reversedList = reverseLL(head);
+    printLL(reversedList);
+
     return 0;
 }
