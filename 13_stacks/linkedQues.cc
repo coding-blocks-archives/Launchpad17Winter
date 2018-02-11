@@ -218,7 +218,7 @@ int main()
     head->next->next->next->next->next = head->next->next;
     Node* ans = detectCycle(head);
     if (ans) cout << ans << " " << ans->data << endl;
-    // removeCycle(head);
+    removeCycle(head);
     // printLL(head);
 
     return 0;
