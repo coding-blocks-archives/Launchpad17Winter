@@ -117,6 +117,82 @@ Node *mergeSort(Node *head)
     return head;
 }
 
+Node* reverse2(Node* head);
+
+Node* addNum(Node* a, Node* b){
+    Node* revA = reverse2(a);
+    Node* revB = reverse2(b);
+
+    Node* curA = revA;
+    Node* curB = revB;
+    Node* ansHead = NULL;
+    Node* ansTail = NULL;
+
+    int carry = 0;
+
+    while(curA || curB || carry){
+        int digA = curA ? curA->data : 0;
+        int digB = curB ? curB->data : 0;
+        int num = digA + digB + carry;
+        int unitDig = num % 10;
+        carry = num / 10;
+        if (ansHead == NULL){
+            ansHead = new Node(unitDig);
+            ansTail = ansHead;
+        } else {
+            ansTail->next = new Node(unitDig);
+            ansTail = ansTail->next;
+        }
+        if (curA) curA = curA->next;
+        if (curB) curB = curB->next;        
+    }
+    revA = reverse2(revA);
+    revB = reverse2(revB);
+    ansHead = reverse2(ansHead);
+    return ansHead;
+}
+
+Node* detectCycle(Node* head){
+    Node* slow = head;
+    Node* fast = head;
+    while(slow && fast && fast->next){
+        slow = slow->next;
+        fast = fast->next->next;
+        if (slow == fast){
+            return slow;
+        }
+    }
+
+    return NULL;
+}
+
+
+Node* reverse2(Node* head){
+    Node* prevNode = NULL;
+    Node* cur = head;
+    while(cur){
+        Node* nextNode = cur->next;
+        cur->next = prevNode;
+        prevNode = cur;
+        cur = nextNode;
+    }
+    return prevNode;
+}
+
+void removeCycle(Node * head){
+    Node* ans = detectCycle(head);
+    if (!ans) return;
+
+    Node* start = head;
+    Node* meetingPoint = ans;
+    while(start->next != meetingPoint->next){
+        start = start->next;
+        meetingPoint = meetingPoint->next;
+    }
+
+    meetingPoint->next = NULL;
+}
+
 int main()
 {
     Node *head = createLL();
@@ -125,11 +201,25 @@ int main()
     // Node* mid = midPoint(head);
     // if (mid) cout << mid << " " <<  mid->data;
 
-    // Node *reversedList = reverseLL(head);
+    // Node *reversedList = reverse2(head);
     // printLL(reversedList);
 
-    head = mergeSort(head);
-    printLL(head);
+    // head = mergeSort(head);
+    // printLL(head);
+
+    // Node* a = createLL();
+    // Node* b = createLL();
+    // Node* ans = addNum(a, b);
+    // printLL(a);
+    // printLL(b);
+    // cout << "-------------" << endl;
+    // printLL(ans);
+
+    head->next->next->next->next->next = head->next->next;
+    Node* ans = detectCycle(head);
+    if (ans) cout << ans << " " << ans->data << endl;
+    // removeCycle(head);
+    // printLL(head);
 
     return 0;
 }
