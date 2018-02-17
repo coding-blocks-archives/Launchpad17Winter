@@ -75,7 +75,7 @@ void printLevelOrder(TreeNode* root) {
 
 void printLevelOrder2(TreeNode* root) {
     queue<TreeNode*> q;
-    const TreeNode* MARKER = NULL;
+    TreeNode* MARKER = NULL;
 
     q.push(root);
     q.push(MARKER);
@@ -105,10 +105,150 @@ void printLevelOrder2(TreeNode* root) {
 
 }
 
+TreeNode* createTreeLevelWise(){
+    int x;
+    cin >> x;
+    if (x == -1) return NULL;
+
+    TreeNode* root = new TreeNode(x);
+    queue<TreeNode*> q;
+    q.push(root);
+
+    while(q.empty() == false){
+        TreeNode* cur = q.front();
+        q.pop();
+
+        cin >> x;
+        if (x != -1) {
+            cur->left = new TreeNode(x);
+            q.push(cur->left);
+        }
+
+        cin >> x;
+        if (x != -1) {
+            cur->right = new TreeNode(x);
+            q.push(cur->right);
+        }
+    }
+    return root;
+}
+
+
+int height(TreeNode* root){
+    if (root == NULL){
+        return 0;
+    }
+
+    int lfHeight = height(root->left);
+    int rgHeight = height(root->right);
+    return max(lfHeight, rgHeight) + 1;
+
+}
+
+int sumTree(TreeNode* root){
+    if (root == NULL){
+        return 0;
+    }
+
+    return sumTree(root->left) + root->data + sumTree(root->right);
+}
+
+#include <cmath>
+bool isBal(TreeNode* root){
+    if (root == NULL){
+        return true;
+    }
+
+    int lfHeight = height(root->left);
+    int rtHeight = height(root->right);
+    bool curBal = abs(lfHeight - rtHeight) <= 1;
+    return curBal && isBal(root->left) && isBal(root->right);
+}
+
+struct Pair{
+    int ht;
+    bool isBal;
+    Pair(int h, bool b){
+        ht = h;
+        isBal = b;
+    }
+    void print(){
+        cout << "ht " << ht << " isBal " << isBal << endl;
+    }
+};
+
+Pair isBal2(TreeNode* root){
+    if (root == NULL){
+        Pair p(0, true);
+        return p;
+    }
+
+    Pair ans(0, false);
+    Pair lAns = isBal2(root->left);
+    if (lAns.isBal == false) return ans;
+
+    Pair rAns = isBal2(root->right);
+    if (rAns.isBal == false) return ans;
+
+    ans.ht = max(lAns.ht, rAns.ht) + 1;
+    ans.isBal = abs(lAns.ht - rAns.ht) <= 1 && lAns.isBal && rAns.isBal;
+    return ans;
+}
+
+
+// zig zag
+#include <stack>
+void printZigZag(TreeNode* root){
+    stack<TreeNode*> curLevel;
+    stack<TreeNode*> nextLevel;
+
+    curLevel.push(root);
+    bool rToL = false;
+
+    while(!curLevel.empty()){
+        TreeNode* cur = curLevel.top();
+        curLevel.pop();
+        cout << cur->data << " ";
+
+        if (rToL){
+            if (cur->right) nextLevel.push(cur->right);
+            if (cur->left) nextLevel.push(cur->left);
+        }
+        else {
+            if (cur->left) nextLevel.push(cur->left);
+            if (cur->right) nextLevel.push(cur->right);
+        }
+
+        if (curLevel.empty()){
+            cout << endl;
+            swap(curLevel, nextLevel);
+            rToL = !rToL;
+        }
+    }
+}
+
+// populate next pointer
+// Inorder Traversal of Cartesian Tree
+// Kth Smallest Element In Tree
+// sum root to leaf numbers
+
 
 int main() {
-    TreeNode* root = createTree();
+    TreeNode* root = createTreeLevelWise();
     // preOrderPrint(root);
-    printLevelOrder(root);
+    printLevelOrder2(root);
 
+    // int ans = height(root);
+    // cout << ans;
+
+    // int ans = sumTree(root);
+    // cout << ans;
+
+    // bool ans = isBal(root);
+    // cout << ans;
+
+    // Pair ans = isBal2(root);
+    // ans.print();
+
+    printZigZag(root);
 }
