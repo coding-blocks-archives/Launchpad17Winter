@@ -227,16 +227,51 @@ void printZigZag(TreeNode* root){
     }
 }
 
-// populate next pointer
+// identical trees?
+bool isIdentical(TreeNode* a, TreeNode* b){
+    if (a == NULL && b == NULL) return true;
+    if (a == NULL || b == NULL) return false;
+
+    return (a->data == b->data) 
+        && isIdentical(a->left, b->left) 
+        && isIdentical(a->right, b->right); 
+}
+
+
+
 // Inorder Traversal of Cartesian Tree
-// Kth Smallest Element In Tree
+int maxElement(int arr[], int be, int en){
+    int pos = be;
+    while(be <= en){
+        if (arr[pos] < arr[be]) pos = be;
+        ++be;
+    }
+    return pos;
+}
+
+TreeNode* CartesianTree(int arr[], int be, int en){
+    if (be > en){
+        return NULL;
+    }
+
+    int pos = maxElement(arr, be, en);
+    TreeNode* root = new TreeNode(arr[pos]);
+    root->left = CartesianTree(arr, be, pos - 1);
+    root->right = CartesianTree(arr, pos + 1, en);
+    return root;
+}
+
+
 // sum root to leaf numbers
+// populate next pointer
+
+// Kth Smallest Element In Tree
 
 
 int main() {
-    TreeNode* root = createTreeLevelWise();
+    // TreeNode* root = createTreeLevelWise();
     // preOrderPrint(root);
-    printLevelOrder2(root);
+    // printLevelOrder2(root);
 
     // int ans = height(root);
     // cout << ans;
@@ -250,5 +285,15 @@ int main() {
     // Pair ans = isBal2(root);
     // ans.print();
 
-    printZigZag(root);
+    // printZigZag(root);
+
+    // 18-Feb-18
+    // TreeNode* a = createTreeLevelWise();
+    // TreeNode* b = createTreeLevelWise();
+    // cout << isIdentical(a, b);
+
+    int arr[] = {-2, -1, 0,  3, 1, 2};
+    TreeNode* root = CartesianTree(arr, 0, 5);
+    printLevelOrder2(root);
+
 }
