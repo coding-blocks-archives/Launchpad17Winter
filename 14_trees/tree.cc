@@ -9,8 +9,10 @@ public:
     int data;
     TreeNode* left;
     TreeNode* right;
+    TreeNode* next;
     TreeNode(int d) {
         data  = d;
+        next = NULL;
         left = NULL;
         right = NULL;
     }
@@ -92,7 +94,8 @@ void printLevelOrder2(TreeNode* root) {
             continue;
         }
 
-        cout << cur->data << " ";
+        // cout << cur->data << " ";
+        cout << cur->data << "(" << (cur->next ? cur->next->data : 0) << ")-->";
 
         if (cur->left) {
             q.push(cur->left);
@@ -133,6 +136,39 @@ TreeNode* createTreeLevelWise(){
     return root;
 }
 
+void connectLevelsInplace(TreeNode* root){
+    TreeNode * cur = root;
+    while(cur){
+        TreeNode* tmp = new TreeNode(0);
+        TreeNode* child = tmp;
+
+        while(cur){
+            if (cur->left){
+                if (tmp->next == NULL){
+                    tmp->next = cur->left;
+                    child = child->next;
+                }
+                else {
+                    child->next = cur->left;
+                    child = child->next;
+                }
+            }
+
+            if (cur->right){
+                if (tmp->next == NULL){
+                    tmp->next = cur->right;
+                    child = child->next;
+                }
+                else {
+                    child->next = cur->right;
+                    child = child->next;
+                }
+            }
+            cur = cur->next;
+        }
+        cur = tmp->next;
+    }
+}
 
 int height(TreeNode* root){
     if (root == NULL){
@@ -263,7 +299,46 @@ TreeNode* CartesianTree(int arr[], int be, int en){
 
 
 // sum root to leaf numbers
+int sumNumbers(TreeNode* root, int curSum){
+    if (root == NULL){
+        return 0;
+    }
+
+    curSum = curSum * 10 + root->data;
+    if (root->left == NULL && root->right == NULL){
+        return curSum;
+    }
+
+    int leftSum = sumNumbers(root->left, curSum);
+    int rightSum = sumNumbers(root->right, curSum);
+    return leftSum + rightSum;
+}
+
+
+
 // populate next pointer
+void connectLevels(TreeNode* root){
+    if (!root) return;
+    queue<TreeNode*> q;
+    q.push(root);
+    TreeNode* MARKER = NULL;
+    q.push(MARKER); 
+
+    while(q.empty() == false){
+        TreeNode* cur = q.front();
+        q.pop();
+
+        if (cur == MARKER){
+            if (q.empty()) break;
+            q.push(MARKER);
+            continue;
+        }
+
+        cur->next = q.front();  // connecting the neighbors
+        if (cur->left) q.push(cur->left);
+        if (cur->right) q.push(cur->right);
+    }
+}
 
 // Kth Smallest Element In Tree
 
@@ -292,8 +367,17 @@ int main() {
     // TreeNode* b = createTreeLevelWise();
     // cout << isIdentical(a, b);
 
-    int arr[] = {-2, -1, 0,  3, 1, 2};
-    TreeNode* root = CartesianTree(arr, 0, 5);
-    printLevelOrder2(root);
+    // int arr[] = {-2, -1, 0,  3, 1, 2};
+    // TreeNode* root = CartesianTree(arr, 0, 5);
+    // printLevelOrder2(root);
 
+    // TreeNode* root = createTreeLevelWise();
+    // int ans = sumNumbers(root, 0);
+    // cout << ans;
+
+    TreeNode* root = createTreeLevelWise();
+    cout << endl;
+    connectLevelsInplace(root);
+    cout << endl;
+    printLevelOrder2(root);
 }

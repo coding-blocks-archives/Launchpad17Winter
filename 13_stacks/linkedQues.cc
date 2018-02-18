@@ -215,10 +215,10 @@ int main()
     // cout << "-------------" << endl;
     // printLL(ans);
 
-    head->next->next->next->next->next = head->next->next;
-    Node* ans = detectCycle(head);
-    if (ans) cout << ans << " " << ans->data << endl;
-    removeCycle(head);
+    // head->next->next->next->next->next = head->next->next;
+    // Node* ans = detectCycle(head);
+    // if (ans) cout << ans << " " << ans->data << endl;
+    // removeCycle(head);
     // printLL(head);
 
     return 0;
