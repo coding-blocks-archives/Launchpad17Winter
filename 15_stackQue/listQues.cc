@@ -48,7 +48,22 @@ void printLL(Node* head){
 }
 
 Node* sortList(Node* head){
-    
+    Node* cur = head;
+    Node* prevNode = NULL;
+
+    while(cur){
+        if (prevNode != NULL && cur->data < 0){
+            prevNode->next = cur->next;
+            cur->next = head;
+            head = cur;
+            cur = prevNode->next;
+        }
+        else {
+            prevNode = cur;
+            cur = cur->next;
+        }
+    }
+    return head;
 }
 
 int main(){
@@ -56,7 +71,7 @@ int main(){
     printLL(head);
 
     Node * updatedList = sortList(head);
-    printLL(reversedList);
+    printLL(updatedList);
 
     return 0;
 }
