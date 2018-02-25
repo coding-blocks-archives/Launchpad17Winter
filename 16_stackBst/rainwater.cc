@@ -61,7 +61,9 @@ int histogram(int height[], int n) {
     int ans = 0;
 
     for (int i = 0; i < n; ++i) {
+        bool flag = false;
         while (index.empty() == false && height[index.top()] > height[i]) {
+            flag = true;
             int idx = index.top();
             index.pop();
             int curArea = height[idx] * (i - idx);
@@ -78,6 +80,26 @@ int histogram(int height[], int n) {
     return ans;
 }
 
+int histogram2(int height[], int n){
+    // working fine
+    stack<int> index;
+    int ans = 0;
+
+    for(int i = 0; i <= n; ++i){
+        int curHeight = (i == n) ? 0 : height[i];
+        while(index.empty() == false && height[index.top()] >= curHeight){
+            int h = height[index.top()];
+            index.pop();
+
+            int idx = index.empty() ? -1 : index.top();
+            int curArea = h * (i - idx - 1);
+            ans = max(curArea, ans);
+        }
+        index.push(i);
+    }
+    return ans;
+}
+
 int main() {
     int height[100];
     int n; cin >> n;
@@ -91,6 +113,6 @@ int main() {
     // vector<int> ans  = nearestSmaller(height, n);
     // printVec(ans);
 
-    int ans = histogram(height, n);
+    int ans = histogram2(height, n);
     cout << ans;
 }
