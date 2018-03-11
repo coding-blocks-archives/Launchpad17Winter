@@ -1,10 +1,25 @@
-// Deepak Aggarwal, Coding Blocks
-// deepak@codingblocks.com
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
-
+const int inf = 1e6;
+typedef vector<int> vi;
+typedef vector<bool> vb;
+void inputVec(vi& v){for(auto&i:v)cin>>i;}
+void printVec(vector<int>& ans) {
+    for (int i = 0; i < ans.size(); ++i) {
+        cout << ans[i] << " ";
+    }
+    cout << endl;
+}
+void printMat(vector<vector<int> > mat) {
+    for (auto& v : mat) {
+        for (auto& x : v) {
+            cout << x << " ";
+        }
+        cout << endl;
+    }
+}
+/********************************/
 int memo[100];
-
 int fib(int n) {
     if (n == 0 || n == 1) return n;
 
@@ -17,7 +32,7 @@ int fib(int n) {
     return ans;
 }
 
-int fibBP(int n) {
+int fibBU(int n) {
     int dp[100];
 
     dp[0] = 0;
@@ -28,7 +43,6 @@ int fibBP(int n) {
     return dp[n];
 }
 
-const int inf = 1e6;
 int reduceTo1(int n) {
     if (n < 1) return 1e6;
     if (n == 1) return 0;
@@ -81,6 +95,42 @@ int reduceTo1BU(int n) {
     return dp[n];
 }
 
+int change(int val, vi& coins){
+    if (val == 0){
+        return 0;
+    }
+
+    if (memo[val] != -1){
+        return memo[val];
+    }
+
+    int ans = inf;
+    for(int i = 0; i < coins.size(); ++i){
+        int remVal = val - coins[i];
+        if (remVal >= 0){
+            int remChange = change(remVal, coins);
+            ans = min(ans, remChange + 1);
+        }
+    }
+    memo[val] = ans;
+    return ans;
+}
+
+int changeBU(int val, vi& coins){
+    vi dp(val + 1, inf);
+
+    dp[1] = 1;
+    for(int curVal = 2; curVal <= val; ++curVal){
+        for(int i = 0; i < coins.size(); ++i){
+            int curCoin = coins[i];
+            if (curCoin <= curVal){
+                dp[curVal] = min(dp[curVal], dp[curVal - curCoin] + 1);
+            }
+        }
+    }
+    return dp[val];
+}
+
 int main() {
     // int n;
     // cin >> n;
@@ -92,8 +142,14 @@ int main() {
 //     int ans = fib(n);
 //     cout << ans;
 
-    int n; cin >> n;
-    int ans = reduceTo1BU(n);
+    // int n; cin >> n;
+    // int ans = reduceTo1BU(n);
+    // cout << ans;
 
+    int n; cin >> n;
+    vi coins(n);
+    inputVec(coins);
+    int val; cin >> val;
+    int ans = change(val, coins);
     cout << ans;
 }

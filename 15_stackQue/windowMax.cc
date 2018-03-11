@@ -7,7 +7,7 @@ using namespace std;
 
 void specialPush(deque<int>& q, vector<int>& v, int i){
     // weaker element cannot withstand me
-    while(q.empty() == false && q.back() < v[i]){
+    while(q.empty() == false && v[q.back()] < v[i]){
         q.pop_back();
     }
     q.push_back(i);
