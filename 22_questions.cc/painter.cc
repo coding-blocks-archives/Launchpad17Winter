@@ -25,9 +25,9 @@ bool allocateBooks(vi& books, int numStudents, int maxPagesForAllocation) {
             pagesAllocated += curPages;
         }
         else {
-            ++curStudent;
             if (curStudent <= numStudents) {
                 pagesAllocated = curPages;
+                ++curStudent;
             }
             else {
                 return false;
